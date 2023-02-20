@@ -1,4 +1,3 @@
-import 'package:first_app/230220-counter-stateless.dart';
 import 'package:flutter/material.dart';
 
 void main() => runApp(MyApp());
