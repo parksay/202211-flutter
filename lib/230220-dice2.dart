@@ -1,7 +1,20 @@
 import 'package:flutter/material.dart';
+import 'dart:math';
+import 'package:fluttertoast/fluttertoast.dart';
+
 
 // 이거는 main 으로 띄워서 올리면 안 올라가고 230220-login-3.dart 먼저 올려서 validation 통과하면 여기로 넘어옴
-class Dice extends StatelessWidget {
+class Dice extends StatefulWidget {
+  @override
+  State<Dice> createState() => _DiceState();
+}
+
+class _DiceState extends State<Dice> {
+  //
+  int dice1 = 1;
+  int dice2 = 1;
+
+  //
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -49,14 +62,14 @@ class Dice extends StatelessWidget {
                   // Expanded > flex: 그냥 web 개발할 때 css 에서 flex 비율 정하는 거랑 비슷함. 하나는 flex:2 주고 하나는 flex:1 주면 두개끼리 크기가 2:1 비율로 확장됨.
                   // 이미지 간결하게 부르기 > Image(image:AssetImage('assets/myImage.png')) ==>> Image.asset('assets/myImage.png')
                   Expanded(
-                    // flex: 2,
-                    child: Image.asset('assets/assets_login/dice1.png'),
+                      // flex: 2,
+                      child: Image.asset('assets/assets_login/dice$dice1.png'),
                   ),
                   // 두 이미지 사이에 공간 조금 만들어주려고 비어 있는 박스 하나 꼽사리로 끼워넣음.
                   SizedBox(width: 20,),
                   Expanded(
-                    // flex: 1,
-                    child: Image.asset('assets/assets_login/dice2.png'),
+                      // flex: 1,
+                      child: Image.asset('assets/assets_login/dice$dice2.png'),
                   ),
                 ],
               ),
@@ -66,14 +79,23 @@ class Dice extends StatelessWidget {
               minWidth: 100.0,
               height: 60.0,
               child: ElevatedButton(
-                style: ButtonStyle(
-                  backgroundColor: MaterialStateProperty.all(Colors.orangeAccent),
-                ),
-                onPressed: (){},
-                child: Icon(Icons.play_arrow,
-                  color:Colors.white,
-                  size: 50.0,
-                ),
+                  style: ButtonStyle(
+                    backgroundColor: MaterialStateProperty.all(Colors.orangeAccent),
+                  ),
+                  onPressed: (){
+                    // setState() 는 그냥 이렇게 아무 데서나 부르면 되네
+                    setState(() {
+                      dice1 = Random().nextInt(6) + 1;
+                      dice2 = Random().nextInt(6) + 1;
+                    });
+                    int total = dice1 + dice2;
+                    // 와... Dart 에서는 JavaScript 의 template literal 문법을 그냥 기본적으로 제공해버리네
+                    showToastMsg("Left dice: $dice1, Right dice: $dice2, tottal: $total");
+                  },
+                  child: Icon(Icons.play_arrow,
+                      color:Colors.white,
+                      size: 50.0,
+                  ),
               ),
             ),
           ],
@@ -81,4 +103,15 @@ class Dice extends StatelessWidget {
       ),
     );
   }
+}
+
+void showToastMsg(message) {
+  // showToast > gravity: 어디에서 나타날 건지
+  Fluttertoast.showToast(
+      msg: message,
+      backgroundColor: Colors.white,
+      textColor: Colors.black,
+      toastLength: Toast.LENGTH_SHORT,
+      gravity:ToastGravity.BOTTOM,
+  );
 }
