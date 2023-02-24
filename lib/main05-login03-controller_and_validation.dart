@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:first_app/230220-dice1.dart';
+import 'package:first_app/main05-login04-dice01-stateless.dart';
 
 void main() => runApp(MyApp());
 
@@ -173,3 +173,12 @@ void showSnackBar3(BuildContext context) {
     ),
   );  //
 }
+
+
+// Focus 에 대해서 알아보자
+// FocusNode: Focus 를 받고 있는 특정한 위젯을 식별함
+// FocusScope: 이 특정한 위젯이 Focus 를 받고 있을 때, 어느 위젯부터 어느 위젯들까지 Focus 판정을 받는지 그 범위를 나타냄.
+// FocusTree: 이건 뭘까?
+// FocusScope.of(context) 메소드를 쓰면 지금 focus 받고 있는 focusNode 를 찾아올 수 있음.
+// FocusNode.unfocus() 메소드를 쓰면 지금 받고 있는 focus 를 해제할 수 있음.
+// 그 둘을 이어붙이면 FocusScope.of(context).unfocus();

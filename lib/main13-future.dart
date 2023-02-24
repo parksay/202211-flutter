@@ -61,7 +61,6 @@ void accessData2() {
 void accessData3() {
   Duration time = Duration(seconds: 3);
   if(time.inSeconds > 2) {
-    // sleep(time);
     Future.delayed(time, () {
       String info2 = "데이터 처리 완료";
       print(info2);
