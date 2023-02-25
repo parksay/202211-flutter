@@ -1,7 +1,7 @@
-import 'dart:io';
 
-// import 'dart:io';
-// 'dart:io' 는 socket 이나 http 통신처럼 외부랑 데이터 주고 받을 때 사용하는 라이브러리
+
+// 이 파일은 "lib" 말고 "test" 디렉토리에서 돌려야 가상 디바이스에 안 올리고 실행만 함
+
 
 // 개념 필기
 // Future
