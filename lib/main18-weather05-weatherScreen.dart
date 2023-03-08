@@ -1,20 +1,37 @@
 import 'package:flutter/material.dart';
+import 'package:google_fonts/google_fonts.dart';
+import 'package:flutter_svg/flutter_svg.dart';
+import 'package:timer_builder/timer_builder.dart';
+import 'package:intl/intl.dart';
+
+// >> import 'package:google_fonts/google_fonts.dart';
+// 폰트 사용하는 법 (구글 폰트 사용)
+// >> import 'package:flutter_svg/flutter_svg.dart';
+// svg 파일 사용하는 법
+// >> import 'package:timer_builder/timer_builder.dart';
+// 시간 정보 불러오기
+// TimerBuilder.periodic() 이 여기서 가져온 거
+// >> import 'package:intl/intl.dart';
+// 시간 정보 데이터 타입을 다루려면 필요하대;
+// DateFormat 이 intl 에서 가져온 거
 
 class WeatherScreen extends StatefulWidget {
   // 아 이게 생성자였네.. key 를 받거나 안 받아도 되고, 그 앞에 메소드 이름이 클래스 생성자였네
   // 여기다가 final 변수 받아줌.
-  const WeatherScreen({required this.parseWeatherData, Key? key, }) : super(key: key);
+  const WeatherScreen({
+    required this.parseWeatherData,
+    Key? key,
+  }) : super(key: key);
 
   final dynamic parseWeatherData;
+
   // final parseWeatherData;
   // 이렇게 선언해줘도 dynamic 이라고 암묵적으로 넘어감.
   // 근데 웬만하면 자료형 dynamic 명시해주라고 dart 가 지적함.
 
-
   @override
   State<WeatherScreen> createState() => _WeatherScreenState();
 }
-
 
 // 오케이.
 // 그럼 상위 화면에서 Navigator 로 이쪽으로 쏴줄 때 데이터 생성자로 넘겨준다고?
@@ -34,6 +51,7 @@ class WeatherScreen extends StatefulWidget {
 class _WeatherScreenState extends State<WeatherScreen> {
   late String cityName;
   late int temperature;
+  var nowDate = DateTime.now();
 
   @override
   void initState() {
@@ -47,38 +65,240 @@ class _WeatherScreenState extends State<WeatherScreen> {
     updateData(widget.parseWeatherData);
   }
 
-
   void updateData(dynamic weatherData) async {
     double tempWeather = weatherData['main']['temp'];
     String nameWeather = weatherData['name'];
     // temperature = tempWeather.toInt(); // 캐스팅해서 int 로 뽑든가
-    temperature = tempWeather.round();  // 반올림해서 int 로 뽑든가
+    temperature = tempWeather.round(); // 반올림해서 int 로 뽑든가
     cityName = nameWeather;
+  }
+
+  String getSystemTime() {
+    return DateFormat("h:mm a").format(nowDate);
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: SafeArea(
-        child: Center(
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: <Widget>[
-              Text('$cityName',
-                style: TextStyle(
-                  fontSize: 30.0,
-                ),
+        appBar: AppBar(
+          // title: const Text(''),
+          // 투명하게 만들고 싶어서 Colors.transparent 로 넣음
+          backgroundColor: Colors.transparent,
+          // Colors.transparent 넣었는데 아직 메인 테마 색상이 바탕에 남음. elevation 을 0으로 넣어주면 됨. 약간 z-index 같은 건가?
+          elevation: 0.0,
+          leading: IconButton(
+            icon: Icon(Icons.near_me),
+            onPressed: () {},
+            iconSize: 30.0,
+            color: Colors.orangeAccent,
+          ),
+          actions: [
+            IconButton(
+              icon: Icon(
+                Icons.location_searching,
               ),
-              SizedBox(height: 20.0,),
-              Text('$temperature',
-                style: TextStyle(
-                  fontSize: 30.0,
+              onPressed: () {},
+              iconSize: 30.0,
+              color: Colors.orangeAccent,
+            ),
+          ],
+        ),
+        body: Container(
+          child: Stack(
+            children: [
+              Image.asset(
+                'assets/assets_weather/background.jpg',
+                fit: BoxFit.cover,
+                width: double.infinity,
+                height: double.infinity,
+              ),
+              Container(
+                padding: EdgeInsets.all(20.0),
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Expanded(child:Column(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            SizedBox(
+                              height: 150.0,
+                            ),
+                            Text(
+                              'Seoul',
+                              style: GoogleFonts.lato(
+                                fontSize: 35.0,
+                                fontWeight: FontWeight.bold,
+                                color: Colors.white,
+                              ),
+                            ),
+                            Row(
+                              children: [
+                                TimerBuilder.periodic(Duration(minutes: 1),
+                                    builder: (context) {
+                                  var sysTime = getSystemTime();
+                                  print('$sysTime');
+                                  // hh:mm AM 형태로 포맷해서 출력하기 - 함수로부터 받아오기
+                                  return Text('$sysTime',
+                                      style: GoogleFonts.lato(
+                                        fontSize: 16.0,
+                                        color: Colors.white,
+                                      ));
+                                }),
+                                // 요일 정보 출력하기 - 인라인으로 바로
+                                Text(
+                                  DateFormat(' - EEEE').format(nowDate),
+                                  style: GoogleFonts.lato(
+                                    fontSize: 16.0,
+                                    color: Colors.white,
+                                  ),
+                                ),
+                                Text(
+                                  DateFormat('d MMM, yyy').format(nowDate),
+                                  style: GoogleFonts.lato(
+                                    fontSize: 16.0,
+                                    color: Colors.white,
+                                  ),
+                                ),
+                              ],
+                            )
+                          ],
+                        ),
+                        Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Text(
+                              '18\u2103',
+                              style: GoogleFonts.lato(
+                                fontSize: 85.0,
+                                fontWeight: FontWeight.w300,
+                                color: Colors.white,
+                              ),
+                            ),
+                            Row(
+                              children: [
+                                SvgPicture.asset('assets/assets_weather/climacon-cloud_rain.svg'),
+                                SizedBox(
+                                  width: 10.0,
+                                ),
+                                Text('rainy day',
+                                  style: GoogleFonts.lato(
+                                    fontSize: 16.0,
+                                    color: Colors.white,
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ],
+                        ),
+                      ],
+                    )),
+                    Column(
+                      children: [
+                        Divider(
+                          height: 15.0,
+                          thickness: 2.0,
+                          color: Colors.white30,
+                        ),
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceAround,
+                          children: [
+                            Column(
+                              children: [
+                                Text('미세먼지',
+                                  style: GoogleFonts.lato(
+                                    fontSize: 16.0,
+                                    color: Colors.white,
+                                  ),
+                                ),
+                                SizedBox(
+                                  height: 10.0,
+                                ),
+                                Image.asset('assets/assets_weather/good.png',
+                                  width: 37.0,
+                                  height: 35.0,
+                                ),
+                                SizedBox(
+                                  height: 10.0,
+                                ),
+                                Text('좋음',
+                                  style: GoogleFonts.lato(
+                                    fontSize: 14.0,
+                                    color: Colors.black87,
+                                    fontWeight: FontWeight.bold,
+                                  ),
+                                ),
+                              ],
+                            ),
+                            Column(
+                              children: [
+                                Text('초미세먼지',
+                                  style: GoogleFonts.lato(
+                                    fontSize: 16.0,
+                                    color: Colors.white,
+                                  ),
+                                ),
+                                SizedBox(
+                                  height: 10.0,
+                                ),
+                                Text('84.03',
+                                  style: GoogleFonts.lato(
+                                    fontSize: 24.0,
+                                    color:Colors.white,
+                                  ),
+                                ),
+                                SizedBox(
+                                  height: 10.0,
+                                ),
+                                Text('좋음',
+                                  style: GoogleFonts.lato(
+                                    fontSize: 14.0,
+                                    color: Colors.black87,
+                                    fontWeight: FontWeight.bold,
+                                  ),
+                                ),
+                              ],
+                            ),
+                            Column(
+                              children: [
+                                Text('이산화탄소',
+                                  style: GoogleFonts.lato(
+                                    fontSize: 16.0,
+                                    color: Colors.white,
+                                  ),
+                                ),
+                                SizedBox(
+                                  height: 10.0,
+                                ),
+                                Image.asset('assets/assets_weather/fair.png',
+                                  width: 37.0,
+                                  height: 35.0,
+                                ),
+                                SizedBox(
+                                  height: 10.0,
+                                ),
+                                Text('좋음',
+                                  style: GoogleFonts.lato(
+                                    fontSize: 14.0,
+                                    color: Colors.black87,
+                                    fontWeight: FontWeight.bold,
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ],
+                        ),
+                      ],
+                    ),
+                  ],
                 ),
               ),
             ],
           ),
         ),
-      ),
     );
   }
 }
