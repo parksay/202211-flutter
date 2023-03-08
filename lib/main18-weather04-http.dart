@@ -29,8 +29,11 @@ class MyNetwork {
   // 이것도 main16-null_safety.dart 에서 배웠지.
   // final 변수는 그 자리에서 바로 값을 넣어주거나, 생성자에서 받아서 넣어주거나
   final String url;
+  final String urlAir;
 
-  MyNetwork(this.url);
+  // url 은 날씨 정보
+  // urlAir 는 대기질 정보
+  MyNetwork(this.url, this.urlAir);
 
 
   // jsonDecode() 메소드의 return 자료형 자체가 dynamic 임.
@@ -69,6 +72,17 @@ class MyNetwork {
       var parsingData = jsonDecode(jsonData);
       return parsingData;
 
+    }
+  }
+
+  Future<dynamic> getMyJsonDataAir() async {
+    http.Response response = await http.get(Uri.parse(urlAir));
+    if(response.statusCode == 200) {
+      String jsonData = response.body;
+      print('response air > body');
+      print(jsonData);
+      var parsingData = jsonDecode(jsonData);
+      return parsingData;
     }
   }
 }

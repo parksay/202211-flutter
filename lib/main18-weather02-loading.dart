@@ -34,21 +34,29 @@ class _LoadingState extends State<Loading> {
       print(latitudeData);
       print(longitudeData);
 
+      //
       String appid = '0d0cc1131b44cd6ea0027e60e69dc007';
       String url = 'https://api.openweathermap.org/data/2.5/weather?units=metric&lat=$latitudeData&lon=$longitudeData&appid=$appid';
-      MyNetwork myNetwork = MyNetwork(url);
+      String urlAir = 'https://api.openweathermap.org/data/2.5/air_pollution?units=metric&lat=$latitudeData&lon=$longitudeData&appid=$appid';
+      MyNetwork myNetwork = MyNetwork(url, urlAir);
 
-
+      //
       // getMyJsonData() 메소드가 async 니까 return 줄 때까지 끝까지 기다리기
       var weatherData = await myNetwork.getMyJsonData();
+      var airData = await myNetwork.getMyJsonDataAir();
       print('weatherData');
       print(weatherData);
+      print('airData');
+      print(airData);
 
       // 정보 다 받아왔으면 이제 그 정보를 화면에 출력해주기
       // 그러면 정보를 보여주는 화면으로 넘어가기 + 그 화면으로 데이터 넘겨주기
       // 1) 화면 넘어가기
       Navigator.push(context, MaterialPageRoute(builder: (context) {
-        return WeatherScreen(parseWeatherData: weatherData,);
+        return WeatherScreen(
+          parseWeatherData: weatherData,
+          parseAirData: airData,
+        );
       }));
   }
 
