@@ -58,7 +58,11 @@ class _LoginState extends State<Login> {
       // 원래는 body: Column(child: ...) 하고 바로 시작했음.
       body: Builder(
         builder:(context) {
-          return SingleChildScrollView(
+          return GestureDetector(
+            onTap: () {
+              FocusScope.of(context).unfocus();
+            },
+            child: SingleChildScrollView(
             child: Column(
               children: <Widget>[
                 Padding(padding: EdgeInsets.only(top: 50)),
@@ -135,8 +139,9 @@ class _LoginState extends State<Login> {
                           ],
                         ),
                       )),
-                ),
-              ],
+                  ),
+                ],
+              ),
             ),
           );
         },
