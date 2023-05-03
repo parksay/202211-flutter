@@ -10,7 +10,7 @@ void main() async {
   // 그래서 Firebase.initializeApp() 를 부르기 전에는 먼저 WidgetsFlutterBinding.ensureInitialized() 를 부름.
   // app 이 먼저 올라가 있는지 확실하게 하고 나서 firebase 실행함.
   WidgetsFlutterBinding.ensureInitialized();
-  Firebase.initializeApp();
+  await Firebase.initializeApp();
   runApp(MyApp());
 }
 

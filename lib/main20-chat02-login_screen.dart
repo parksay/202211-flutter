@@ -1,6 +1,7 @@
 import 'package:first_app/config-chat-palette.dart';
+import 'package:first_app/main20-chat03-chat_screen.dart';
 import 'package:flutter/material.dart';
-
+import 'package:firebase_auth/firebase_auth.dart';
 
 class LoginSignupScreen extends StatefulWidget {
   const LoginSignupScreen({Key? key}) : super(key: key);
@@ -32,6 +33,10 @@ class _LoginSignupScreenState extends State<LoginSignupScreen> {
 
     }
   }
+  // firebase 인증 인스턴스
+  final _authFirebase = FirebaseAuth.instance;
+
+
 
   @override
   Widget build(BuildContext context) {
@@ -461,8 +466,65 @@ class _LoginSignupScreenState extends State<LoginSignupScreen> {
                     borderRadius: BorderRadius.circular(50),
                   ),
                   child: GestureDetector(
-                    onTap: () {
+                    onTap: () async {
+                      // validation 은 공통 적용
                       _tryValidation();
+                      // sign up 탭이 활성화돼 있는 상태에서 버튼 클릭
+                      if(isSignupScreen) {
+                        // 서버 통신이니까 비동기로 이루어질 것.
+                        // onTap 함수를 비동기로 만들어 주고 auth 메소드 앞에는 await 붙여주기
+                        // 서버 다녀와서 return 값을 던져줄 거니까 변수 newUser 로 받아주기
+                        // 서버 다녀올 때는 항상 예외 처리 신경 쓰기. try-catch 구문으로 감싸줄 것.
+                        // 서버 다녀와서 return 값이 항상 정상적이지만은 않을 것이니까.
+                        // 갑자기 통신이 끊길 수도 있고, 이미 가입한 사용자거나 틀렸거나..
+                        try {
+                          final newUser = await _authFirebase.createUserWithEmailAndPassword(
+                              email: userEmail,
+                              password: userPassword
+                          );
+                          // user 가 정상적으로 등록됐을 경우
+                          if(newUser.user != null) {
+                            // chat screen 으로 바로 이동하기
+                            Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                    builder: (context) {
+                                      return ChatScreen();
+                                    }),
+                            );
+                          }
+                        } catch(e) {
+                          print(e);
+                          ScaffoldMessenger.of(context).showSnackBar(
+                            SnackBar(
+                              content: Text("Please check your email and password"),
+                              backgroundColor: Colors.blue,
+                            )
+                          );
+                        }
+                      }
+                      // log in 탭이 활성화돼 있는 상태에서 버튼 클릭
+                      if(!isSignupScreen) {
+                        try {
+                          final signUser = await _authFirebase.signInWithEmailAndPassword(
+                            email: userEmail,
+                            password: userPassword,
+                          );
+                          // user 가 정상적으로 등록됐을 경우
+                          if (signUser.user != null) {
+                            // chat screen 으로 바로 이동하기
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                  builder: (context) {
+                                    return ChatScreen();
+                                  }),
+                            );
+                          }
+                        } catch(e) {
+                          print(e);
+                        }
+                      }
                     },
                     child: Container(
                       decoration: BoxDecoration(
