@@ -76,6 +76,7 @@ flutter:
    - assets/kakaotalk.png
    - assets/assets_login/
    - assets/assets_weather/
+   - assets/assets_chat/
 
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/assets-and-images/#resolution-aware
