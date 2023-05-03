@@ -40,10 +40,15 @@ android {
         applicationId "com.example.first_app"
         // You can update the following values to match your application needs.
         // For more information, see: https://docs.flutter.dev/deployment/android#reviewing-the-build-configuration.
-        minSdkVersion flutter.minSdkVersion
+        minSdkVersion 19
+        // firebase  연동하려니까 flutter sdk 가 최소 19버전 이상이어야 한다고 에러 나서 바꿈.
+//        minSdkVersion flutter.minSdkVersion
         targetSdkVersion flutter.targetSdkVersion
         versionCode flutterVersionCode.toInteger()
         versionName flutterVersionName
+        // firebase 연동하려니까 DexArchiveMergerException 에러 나서 추가함
+        multiDexEnabled true
+
     }
 
     buildTypes {
@@ -61,4 +66,6 @@ flutter {
 
 dependencies {
     implementation platform('com.google.firebase:firebase-bom:32.0.0')
+    // firebase 연동하려니까 DexArchiveMergerException 에러나서 추가함
+    implementation "com.android.support:multidex:2.0.1"
 }

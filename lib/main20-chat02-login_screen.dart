@@ -2,7 +2,6 @@ import 'package:first_app/config-chat-palette.dart';
 import 'package:flutter/material.dart';
 
 
-
 class LoginSignupScreen extends StatefulWidget {
   const LoginSignupScreen({Key? key}) : super(key: key);
 
@@ -219,6 +218,9 @@ class _LoginSignupScreenState extends State<LoginSignupScreen> {
                                     }
                                     userName = value;
                                   },
+                                  onChanged: (value) {
+                                    userName = value;
+                                  },
                                   decoration: InputDecoration(
                                     prefixIcon: Icon(Icons.account_circle,
                                     color: Palette.iconColor
@@ -261,6 +263,10 @@ class _LoginSignupScreenState extends State<LoginSignupScreen> {
                                     }
                                     userEmail = value;
                                   },
+                                  onChanged: (value) {
+                                    userEmail = value;
+                                  },
+                                  keyboardType: TextInputType.emailAddress, // 입력할 때 스마트폰에서 올려주는 키보드가 약간 바뀜. "@" 있고 "." 있고 그런 키보드
                                   decoration: InputDecoration(
                                     prefixIcon: Icon(Icons.email,
                                         color: Palette.iconColor
@@ -303,6 +309,10 @@ class _LoginSignupScreenState extends State<LoginSignupScreen> {
                                     }
                                     userPassword = value;
                                   },
+                                  onChanged: (value) {
+                                    userPassword = value;
+                                  },
+                                  obscureText: true,  // 비밀번호 치면 입력창에 "*****" 로 보이는 기능
                                   decoration: InputDecoration(
                                     prefixIcon: Icon(Icons.lock,
                                         color: Palette.iconColor
@@ -353,6 +363,9 @@ class _LoginSignupScreenState extends State<LoginSignupScreen> {
                                     }
                                     userEmail = value;
                                   },
+                                  onChanged: (value) {
+                                    userEmail = value;
+                                  },
                                   decoration: InputDecoration(
                                     prefixIcon: Icon(Icons.email,
                                         color: Palette.iconColor
@@ -395,6 +408,10 @@ class _LoginSignupScreenState extends State<LoginSignupScreen> {
                                     }
                                     userPassword = value;
                                   },
+                                  onChanged: (value) {
+                                    userPassword = value;
+                                  },
+                                  obscureText: true,  // 비밀번호 치면 입력창에 "*****" 로 보이는 기능
                                   decoration: InputDecoration(
                                     prefixIcon: Icon(Icons.lock,
                                         color: Palette.iconColor
