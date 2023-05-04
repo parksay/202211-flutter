@@ -1,3 +1,4 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 
@@ -54,7 +55,6 @@ class _ChatScreenState extends State<ChatScreen> {
                 _authFirebase.signOut();
                 // 로그아웃 했으니까 다시 로그인 페이지로 이동
                 Navigator.pop(context);
-
               },
               icon: Icon(
                 Icons.exit_to_app_sharp,
@@ -63,8 +63,27 @@ class _ChatScreenState extends State<ChatScreen> {
           ),
         ],
       ),
-      body: Center(
-        child: Text("this is my chat app"),
+      body: StreamBuilder(
+        stream: FirebaseFirestore.instance.collection("chats/wD3okeu7jU7XjlorbZPc/message").snapshots(),
+        builder: (BuildContext context, AsyncSnapshot<QuerySnapshot<Map<String, dynamic>>> snapshot) {
+          // 아직 데이터를 받아오기도 전인데 출력부터 하려고 하니까 에러가 남
+          // 데이터를 받아오기 전이라면 로딩 화면 보여주기
+          if(snapshot.connectionState == ConnectionState.waiting) {
+            return Center(
+                child:CircularProgressIndicator(),
+            );
+          }
+          final docs = snapshot.data!.docs;
+          return ListView.builder(
+              itemCount: docs.length,
+              itemBuilder: (context, index) {
+                return Container(
+                  padding: EdgeInsets.all(20.0),
+                  child: Text(docs[index]["text"]),
+                );
+              },
+          );
+        },
       ),
     );
   }
