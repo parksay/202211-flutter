@@ -1,3 +1,4 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:first_app/config-chat-palette.dart';
 import 'package:first_app/main20-chat03-chat_screen.dart';
 import 'package:flutter/material.dart';
@@ -492,6 +493,16 @@ class _LoginSignupScreenState extends State<LoginSignupScreen> {
                                 email: userEmail,
                                 password: userPassword
                             );
+
+                            // 위에서 newUser 를 등록하는 건 auth 서비스에다가 등록하는 것.
+                            // firestore 에다가 (email 하고 password) 외의 다른 정보를 함께 등록해 놓고 싶어
+                            // 그래서 firestore instance 불러와서 "user" 컬렉션 만들고 uid 에다가 정보들 꽂어주는 것.
+                            await FirebaseFirestore.instance.collection("user").doc(newUser.user!.uid)
+                            .set({
+                              "userName": userName,
+                              "email": userEmail,
+                            });
+
                             // user 가 정상적으로 등록됐을 경우
                             if(newUser.user != null) {
                               // chat screen 으로 바로 이동하기
