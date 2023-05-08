@@ -14,7 +14,7 @@ class LoginSignupScreen extends StatefulWidget {
 
 class _LoginSignupScreenState extends State<LoginSignupScreen> {
   // Log in 탭과 Sign up 탭 중에 어느 탭이 활성화돼 있는지 상태 변수
-  bool isSignupScreen = true;
+  bool isSignupScreen = false;
   // form 필드에 넣어줄 key 변수 - FormState 를 받아옴
   final _formKey = GlobalKey<FormState>();
   // 사용자 입력 값들을 임시로 넣어둘 문자열 변수
@@ -550,8 +550,42 @@ class _LoginSignupScreenState extends State<LoginSignupScreen> {
                                 showCircularProgress = false;
                               });
                             }
-                          } catch(e) {
+                          } on FirebaseAuthException catch(e) {
+                            // try-catch 문 쓸 때 exception 잡는 법
+                            // try { ... } on FirebaseAuthException catch(e) { ... }
+                            // 이렇게 어떤 exception 이 일어난 건지 경우의 수를 나눠서 받아줄 수 있음
+                            // 어떤 exception 이 일어났는지에 따라서 각각 처리를 다르게 마련해서 대처하는 거지
+                            // 이때 on ~~~Exception 여기서 exception 데이터 타입에 따라서 그 안에서 꺼내올 수 있는 속성값도 다름.
+                            // 무슨 말이냐면 try { ... } catch(e) { ... } 이렇게 하면 e.code 나 e.message 를 불러올 수가 없음.
+                            // object 자료형에는 code 속성이나 message 속성이 없다고 에러가 남.
+                            // 반면에 try { ... } on FirebaseAuthException catch(e) { ... } 이렇게 하면 e.code 또는 e.message 등을 불러올 수가 있음.
+                            // 여기서 FirebaseAuthException 자료형은 firebase 패키지에서 만들어 둔 exception 데이터 타입이고, 그 안에 있는 속성을 불러다 쓸 수 있는 거지.
                             print(e);
+                            // 이렇게 e.code 를 불러다 쓸 수 있는 이유는 위에서 on FirebaseAuthException catch(e) { ... } 라고 하면서 "e" 변수의 데이터 타입을 이미 지정해 놓은 상태이기 때문
+                            if(e.code == "wrong-password") {  // 비번이 틀려서 exception 떴다면?
+                              // 로딩바 제거
+                              setState(() {
+                                showCircularProgress = false;
+                              });
+                              // 메세지 표시
+                              ScaffoldMessenger.of(context).showSnackBar(
+                                SnackBar(
+                                  content: Text(e.message!),
+                                  backgroundColor: Colors.blue,
+                                )
+                              );
+                            }
+                          } catch(e) { // 그 외의 에러
+                            // 여기서는 e.code 라든가 e.message 등을 불러다 쓰려면 에러가 남.
+                            // 여기서 e 는 firebase 가 직접 만들어 둔 exception 타입이 아니라 object 타입이기 때문.
+                            // object 타입의 e 에는 그런 속성들이 없겠지. 어떤 error 가 넘어올지 모르는 상태니까.
+                            print(e);
+                            ScaffoldMessenger.of(context).showSnackBar(
+                              SnackBar(
+                                content: Text("something is wrong"),
+                                backgroundColor: Colors.blue,
+                              )
+                            );
                           }
                         }
                       },
