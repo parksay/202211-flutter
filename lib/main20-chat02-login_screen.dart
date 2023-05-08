@@ -506,13 +506,15 @@ class _LoginSignupScreenState extends State<LoginSignupScreen> {
                             // user 가 정상적으로 등록됐을 경우
                             if(newUser.user != null) {
                               // chat screen 으로 바로 이동하기
-                              Navigator.push(
-                                  context,
-                                  MaterialPageRoute(
-                                      builder: (context) {
-                                        return ChatScreen();
-                                      }),
-                              );
+                              // Navigator.push(
+                              //     context,
+                              //     MaterialPageRoute(
+                              //         builder: (context) {
+                              //           return ChatScreen();
+                              //         }),
+                              // );
+                              // 위 구문은 삭제하기로 함. 이유는 main.dart > StreamBuilder 안에 적어 둠.
+
                               // 로딩바 제거
                               setState(() {
                                 showCircularProgress = false;
@@ -538,13 +540,15 @@ class _LoginSignupScreenState extends State<LoginSignupScreen> {
                             // user 가 정상적으로 등록됐을 경우
                             if (signUser.user != null) {
                               // chat screen 으로 바로 이동하기
-                              Navigator.push(
-                                context,
-                                MaterialPageRoute(
-                                    builder: (context) {
-                                      return ChatScreen();
-                                    }),
-                              );
+                              // Navigator.push(
+                              //   context,
+                              //   MaterialPageRoute(
+                              //       builder: (context) {
+                              //         return ChatScreen();
+                              //       }),
+                              // );
+                              // 위 구문은 삭제하기로 함. 이유는 main.dart > StreamBuilder 안에 적어 둠.
+
                               // 로딩바 제거
                               setState(() {
                                 showCircularProgress = false;

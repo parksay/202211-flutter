@@ -54,7 +54,8 @@ class _ChatScreenState extends State<ChatScreen> {
                 // firebase 에서 로그인 정보 지우기
                 _authFirebase.signOut();
                 // 로그아웃 했으니까 다시 로그인 페이지로 이동
-                Navigator.pop(context);
+                // Navigator.pop(context);
+                // 위 구문은 삭제하기로 함. 이유는 main.dart > StreamBuilder 안에 적어 둠.
               },
               icon: Icon(
                 Icons.exit_to_app_sharp,
