@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
-class ChatBubble extends StatelessWidget {
-  const ChatBubble(this.message, this.isMyMessage, {Key? key}) : super(key: key);
+class MyChatBubble extends StatelessWidget {
+  const MyChatBubble(this.message, this.isMyMessage, {Key? key}) : super(key: key);
 
   final String message;
   final bool isMyMessage;

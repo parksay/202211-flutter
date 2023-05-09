@@ -1,6 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:first_app/main20-chat07-chat_bubble.dart';
+import 'package:first_app/main20-chat07-my_chat_bubble.dart';
+import 'package:first_app/main20-chat08-lib_chat_bubble.dart';
 import 'package:flutter/material.dart';
 
 class Messages extends StatelessWidget {
@@ -32,7 +33,13 @@ class Messages extends StatelessWidget {
           reverse: true,
           itemCount: chatDocs.length,
           itemBuilder: (context, index) {
-            return ChatBubble(
+            // 내가 만든 메세지 버블 위젯
+            // return MyChatBubble(
+            //     chatDocs[index]["text"],
+            //     chatDocs[index]["userId"].toString() == FirebaseAuth.instance.currentUser!.uid
+            // );
+            // flutter library 로 만든 메세지 버블 위젯
+            return LibChatBubble(
                 chatDocs[index]["text"],
                 chatDocs[index]["userId"].toString() == FirebaseAuth.instance.currentUser!.uid
             );
