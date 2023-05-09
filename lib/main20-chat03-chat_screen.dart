@@ -1,4 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:first_app/main20-chat05-messages.dart';
+import 'package:first_app/main20-chat06-new_message.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 
@@ -46,7 +48,7 @@ class _ChatScreenState extends State<ChatScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text("hello world"),
+        title: Text("This is chat screen"),
         actions: [
           // firebase 로그아웃 기능 만들기
           IconButton(
@@ -64,27 +66,15 @@ class _ChatScreenState extends State<ChatScreen> {
           ),
         ],
       ),
-      body: StreamBuilder(
-        stream: FirebaseFirestore.instance.collection("chats/wD3okeu7jU7XjlorbZPc/message").snapshots(),
-        builder: (BuildContext context, AsyncSnapshot<QuerySnapshot<Map<String, dynamic>>> snapshot) {
-          // 아직 데이터를 받아오기도 전인데 출력부터 하려고 하니까 에러가 남
-          // 데이터를 받아오기 전이라면 로딩 화면 보여주기
-          if(snapshot.connectionState == ConnectionState.waiting) {
-            return Center(
-                child:CircularProgressIndicator(),
-            );
-          }
-          final docs = snapshot.data!.docs;
-          return ListView.builder(
-              itemCount: docs.length,
-              itemBuilder: (context, index) {
-                return Container(
-                  padding: EdgeInsets.all(20.0),
-                  child: Text(docs[index]["text"]),
-                );
-              },
-          );
-        },
+      body: Container(
+        child: Column(
+          children: [
+            Expanded(
+              child: Messages(),
+            ),
+            NewMessage(),
+          ],
+        ),
       ),
     );
   }
